@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Innovative Assignment</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card {
+           
+            animation: fadeIn 0.5s ease-in-out;
+            background-color: white;
+            border-radius: 2px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 7px;
+            width: 300px;
+            align-self: center;
+        }
+        /* Background overlay */
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://example.com/background-image.jpg'); /* Replace 'example.com' with the URL of your background image */
+            background-size: cover;
+            filter: blur(10px);
+            z-index: -1;
+        }
+        .background-overlay:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the alpha value to control the darkness of the overlay */
+        }
+       
+    </style>
+</head>
+<body class="bg-gray-5 font-sans relative">
+    <!-- Background overlay -->
+    <div class="background-overlay"></div>
+
+    <!-- Navbar -->
+    <nav class="bg-black text-white relative z-10">
+        <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+           <h1 class="text-4xl font-semibold mb-4 text-align center">OS Innovative Assignment</h1>
+        </div>
+    </nav>
+
+     <!-- Main Content -->
+     <div class="container mx-auto px-4 py-8 relative z-10">
+        
+        <h2 class="text-2xl font-semibold mb-4" >Welcome to the Operating Systems Assignment! In this assignment, 
+            we'll explore two fundamental concepts in operating systems: process scheduling 
+            and synchronization. We'll implement the First-Come, First-Served (FCFS) scheduling
+             algorithm and tackle the classic reader-writer synchronization problem.</h2>
+        <!-- Featured Content Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+   
+   
+            <!-- Example card 1 -->
+<div class="card bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
+    <div class="relative">
+        <img src="https://files.codingninjas.in/article_images/program-for-first-come-first-serve-scheduling-0-1680107111.webp" alt="FCFS" class="w-full h-64 object-cover">
+        <!-- Overlay for hover effect -->
+        <div class="absolute inset-0 bg-black opacity-0 hover:opacity-50 transition duration-300"></div>
+        <!-- Watch Now button -->
+        <a href="fcfs.html" class="absolute bottom-4 left-4 bg-blue-500 text-white px-4 py-2 rounded-full transition duration-300 hover:bg-blue-600">Calculate</a>
+    </div>
+    <div class="p-4">
+        <h2 class="text-xl font-semibold mb-2 text-gray-900">First Come First Serve</h2>
+        <p class="text-gray-700">Scheduling Algorithm</p>
+    </div>
+</div>
+
+           <!-- Example card 2 -->
+<div class="card bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
+    <div class="relative">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgfHfpm6khDinhxHhA16K-PYrHeRRJV_bon0kipx9LNA&s" alt="Maharshi" class="w-full h-64 object-cover">
+        <div class="absolute inset-0 bg-black opacity-0 hover:opacity-50 transition duration-300"></div>
+        <a href="rw.html" class="absolute bottom-4 left-4 bg-blue-500 text-white px-4 py-2 rounded-full transition duration-300 hover:bg-blue-600">Calculate</a>
+    </div>
+    <div class="p-4">
+        <h2 class="text-xl font-semibold mb-2 text-gray-900">Reader Writer Problem</h2>
+        <p class="text-gray-700">Inter Process Communication</p>
+    </div>
+</div>
+
+
+    <!-- Play CDN Script -->
+    <script src="https://cdn.tailwindcss.com/"></script>
+</body>
+</html>

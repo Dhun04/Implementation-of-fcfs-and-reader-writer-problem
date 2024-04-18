@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>First Come First Serve Algorithm</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+        .gantt {
+            background-color: aquamarine;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .gantt div {
+            background-color: aquamarine;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            position: relative;
+        }
+        .gantt .bar {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background-color: #007bff;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body background="https://img.freepik.com/free-vector/blurred-bokeh-banner-perfect-backdrop-your-creative-project-vector_1017-48613.jpg"> 
+    <nav class="bg-black text-white relative z-10">
+        <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+           <h1 class="text-4xl font-semibold mb-4 text-align center">First Come First Serve Algorithm</h1>
+        </div>
+    </nav>
+    <br>
+    <h2 class="text-2xl font-semibold mb-4 text-align center">Enter Arrival and Burst Time for each process:</h2>
+    <input type="hidden" id="processCounter" value="1">
+    <table id="processesTable">
+        <thead>
+        <tr>
+            <th>Process ID</th>
+            <th>Arrival Time</th>
+            <th>Burst Time</th>
+        </tr>
+        </thead>
+        <tbody id="processes"></tbody>
+    </table>
+    <button class="bg-green-400 text-white font-bold py-2 px-4 rounded" onclick="addProcess()">Add Process</button>
+    <button class="bg-green-400 text-white font-bold py-2 px-4 rounded" onclick="calculateFCFS()">Calculate FCFS</button>
+    <br>
+    <br>
+    <br>
+    <h3 class="text-2xl font-semibold mb-4 text-align center">Calculated Values</h3>
+    <table id="resultsTable" style="margin-top: 20px;">
+        <thead>
+        <tr>
+            <th>Process ID</th>
+            <th>Waiting Time</th>
+            <th>Turnaround Time</th>
+            <th>Finish Time</th>
+        </tr>
+        </thead>
+        <tbody id="results"></tbody>
+    </table>
+    <p>
+         <span id="avgWaiting"></span><br/>
+         <span id="avgTurnaround"></span>
+    </p>
+
+
+    <br><br>
+    <h3 class="text-2xl font-semibold mb-4 text-align center">Gantt Chart</h3>
+    <div class="gantt" id="ganttChart"></div>
+    <br><br>
+
+    <button class="bg-blue-400 text-white font-bold py-2 px-4 rounded" onclick="resetPage()">Reset</button>
+
+    <script>
+        function addProcess() {
+            const processTable = document.getElementById("processes");
+            const id = document.getElementById("processCounter").value;
+            document.getElementById("processCounter").value = parseInt(id) + 1;
+            const row = processTable.insertRow();
+
+            row.insertCell(0).innerHTML = id;
+            const arrivalCell = row.insertCell(1);
+            arrivalCell.innerHTML = "<input type='number' class='arrival' required>";
+            const burstCell = row.insertCell(2);
+            burstCell.innerHTML = "<input type='number' class='burst' required>";
+
+            processes.push({
+                arrival: arrivalCell.firstChild,
+                burst: burstCell.firstChild,
+                waiting: 0,
+                turnaround: 0,
+                finish: 0,
+                id: id,
+                completed: false
+            });
+        }
+
+        let processes = [];
+
+        function calculateFCFS() {
+            processes.sort((a, b) => a.arrival.value - b.arrival.value);
+
+            let currentTime = 0;
+            let completedProcesses = 0;
+            let totalWaitingTime = 0;
+            let totalTurnaroundTime = 0;
+            let ganttChart = '';
+
+            const results = document.getElementById("results");
+            results.innerHTML = "";
+            let rowIndex = 0;
+
+            while (completedProcesses < processes.length) {
+                let nextProcess = processes.find(process => process.arrival.value <= currentTime && !process.completed);
+
+                if (nextProcess) {
+                    nextProcess.waiting = currentTime - nextProcess.arrival.value;
+                    nextProcess.turnaround = nextProcess.waiting + parseInt(nextProcess.burst.value);
+                    totalWaitingTime += nextProcess.waiting;
+                    totalTurnaroundTime += nextProcess.turnaround;
+                    nextProcess.finish = currentTime + parseInt(nextProcess.burst.value);
+                    nextProcess.completed = true;
+
+                    ganttChart +=`<div style="width:${parseInt(nextProcess.burst.value) * 20}px;">P${nextProcess.id}</div>`;
+
+                    currentTime += parseInt(nextProcess.burst.value);
+                    completedProcesses++;
+
+                    let resultRow = results.insertRow(rowIndex);
+                    let resultId = resultRow.insertCell(0);
+                    resultId.innerHTML = nextProcess.id;
+                    let resultWaiting = resultRow.insertCell(1);
+                    resultWaiting.innerHTML = nextProcess.waiting;
+                    let resultTurnaround = resultRow.insertCell(2);
+                    resultTurnaround.innerHTML = nextProcess.turnaround;
+                    let resultFinish = resultRow.insertCell(3);
+                    resultFinish.innerHTML = nextProcess.finish;
+
+                    rowIndex++;
+                } else {
+                    currentTime++;
+                }
+            }
+
+            const avgWaiting = document.getElementById("avgWaiting");
+            const avgTurnaround = document.getElementById("avgTurnaround");
+            avgWaiting.innerHTML = "Average waiting time: " + (totalWaitingTime / processes.length);
+            avgTurnaround.innerHTML = "Average turnaround time: " + (totalTurnaroundTime / processes.length);
+
+            document.getElementById("ganttChart").innerHTML = ganttChart;
+        }
+
+        function resetPage() {
+            document.getElementById("processCounter").value = "1";
+            document.getElementById("processes").innerHTML = "";
+            document.getElementById("results").innerHTML = "";
+            document.getElementById("avgWaiting").innerHTML = "0";
+            document.getElementById("avgTurnaround").innerHTML = "0";
+            processes = [];
+            document.getElementById("ganttChart").innerHTML = "";
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com/"></script>
+</body>
+</html>

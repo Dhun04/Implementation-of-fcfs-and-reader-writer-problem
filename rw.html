@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reader-Writer Problem</title>
+<style>
+    .container {
+        display: flex;
+        height: 100vh;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        align-items: center;
+        align-self: center;
+        align-content: center;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+</head>
+<body background="https://st5.depositphotos.com/72897924/61802/i/450/depositphotos_618021422-stock-photo-gradient-background-color-soft-light.jpg"> 
+    <nav class="bg-black text-white relative z-10">
+        <div class=" mx-auto px-4 py-6 flex justify-between items-center">
+           <h1 class="text-4xl font-semibold mb-4 text-align center">Reader-Writer Problem</h1>
+        </div>
+    </nav>
+    <br>
+    <div class="container">
+        <div>
+            <button class="bg-blue-400 text-white font-bold py-2 px-4 rounded" onclick="startReader()">Start Reader</button>
+            <button class="bg-blue-400 text-white font-bold py-2 px-4 rounded" onclick="startWriter()">Start Writer</button>
+            <button class="bg-blue-400 text-white font-bold py-2 px-4 rounded" onclick="stopReader()">Stop Reader</button>
+            <button class="bg-blue-400 text-white font-bold py-2 px-4 rounded" onclick="stopWriter()">Stop Writer</button>
+            <br>
+            
+            <br>
+            <table id="output">
+                <tr>
+                    <th>Execution</th>
+                    <th>Result</th>
+                    <th>Active Readers</th>
+                    <th>Active Writers</th>
+                </tr>
+            </table>
+            <br><br>
+            <button class="bg-green-500 text-white font-bold py-2 px-4 rounded" onclick="resetPage()">Reset</button>
+
+        </div>
+    </div>
+
+    
+    <script>
+        let readCount = 0;
+        let writeCount = 0;
+        let executionCount = 0;
+        let writing = false;
+
+       function startReader() {
+            if (!writing) {
+                readCount++;
+                executionCount++;
+                updateTable(`${readCount} active readers.`, readCount, writeCount);
+            } else {
+                executionCount++;
+                updateTable(`Writer is writing. Reader cannot read.`, readCount, writeCount);
+            }
+        }
+
+        function startWriter() {
+            if (readCount > 0) {
+                executionCount++;
+                updateTable(`Writer waits for readers to finish.`, readCount, writeCount);
+            } else if (writing) {
+                executionCount++;
+                updateTable(`Writer waits for previous writer to finish.`, readCount, writeCount);
+            } else {
+                writing = true;
+                writeCount++;
+                executionCount++;
+                updateTable(`${writeCount} active writers. `, readCount, writeCount);
+            }
+        }
+
+        function stopReader() {
+            if (readCount > 0) {
+                readCount--;
+                executionCount++;
+                updateTable(`Reader ${readCount + 1} stops reading.`, readCount, writeCount);
+            } else {
+                executionCount++;
+                updateTable(`No active reader.`, readCount, writeCount);
+            }
+        }
+
+        function stopWriter() {
+            if (writing) {
+                writing = false;
+                writeCount--; // Decrement the writer count
+                executionCount++;
+                updateTable(`Writer ${writeCount + 1} stops writing.`, readCount, writeCount);
+            } else {
+                executionCount++;
+                updateTable(`No active writer.`, readCount, writeCount);
+            }
+        }
+
+        function updateTable(message, readers, writers) {
+            const table = document.getElementById('output');
+            const row = table.insertRow(-1);
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+            const cell3 = row.insertCell(2);
+            const cell4 = row.insertCell(3);
+            cell1.textContent = executionCount;
+            cell2.textContent = message;
+            cell3.textContent = readers;
+            cell4.textContent = writers;
+        }
+
+        function resetPage() {
+            // Reset all variables to their initial state
+            readCount = 0;
+            writeCount = 0;
+            executionCount = 0;
+            writing = false;
+
+            // Clear the table
+            const table = document.getElementById('output');
+            table.innerHTML = "<tr><th>Execution</th><th>Result</th><th>Active Readers</th><th>Active Writers</th></tr>";
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com/"></script>
+</body>
+</html>
